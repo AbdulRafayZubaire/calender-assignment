@@ -1,40 +1,96 @@
-require_relative 'validation'
+require_relative 'event_validation'
 require_relative 'event'
+$TITLE_WIDTH = 70
 
 module EventDisplay
-  include Validation
+  include EventValidation
 
   def self.add_event
-    title = Validation.string_input { 'Enter Title: ' }
-    year = Validation.validated_year_input
-    month = Validation.validated_month_input
-    date = Validation.validated_date_of_month(month, year)
+    title = EventValidation.string_input { 'Enter Title: ' }
+    year = EventValidation.validated_year_input
+    month = EventValidation.validated_month_input
+    date = EventValidation.validated_date_of_month(month, year)
 
-    Event.new(title, Date.new(year, month, date))
+    {
+      title: title,
+      year: year,
+      month: month,
+      date: date
+    }
   end
 
-  def self.edit_event(event)
+  def self.edit_attribute_values
     puts '1. Edit Title'
     puts '2. Edit Date'
-    puts 'Select an option from above: '
+    print 'Select an option from above: '
 
-    selected_option = Validation.validated_numeric_input(1..2)
+    selected_option = EventValidation.validated_numeric_input(1..2)
 
+    result = {}
     if selected_option == 1
-      event.title = Validation.string_input { 'Enter New Title: ' }
-      true
+      title = EventValidation.string_input { 'Enter New Title: ' }
+      result['attr_to_edit'] = 'title'
+      result['value'] = title
     else
-      event.date = read_date
-      event
+      date = read_date
+      result['attr_to_edit'] = 'date'
+      result['value'] = date
     end
+
+    result
   end
 
   def self.read_date
     puts 'Enter Date of the event'
-    year = Validation.validated_year_input
-    month = Validation.validated_month_input
-    date = Validation.validated_date_of_month(month, year)
+    year = EventValidation.validated_year_input
+    month = EventValidation.validated_month_input
+    date = EventValidation.validated_date_of_month(month, year)
     Date.new(year, month, date)
+  end
+
+  def self.display_events_by_month(month_events)
+    month_events.each do |_, day_events|
+      next unless day_events.is_a?(Array) # incase array is empty, could have used safe nav as well
+
+      puts `clear`
+
+      print 'No.'.ljust(5), 'Title'.ljust(50), "Date\n"
+      puts '-' * $TITLE_WIDTH
+      day_events.each_with_index do |event, index|
+        # print "#{index+1}".ljust(5), EventDisplay.show(event)
+        print "#{index + 1}".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')}\n"
+      end
+    end
+  end
+
+  def self.try_again?
+    yield
+
+    print 'Try Again (Yes/No): '
+    return false unless EventValidation.validated_boolean_input
+
+    true
+  end
+
+  def self.display_events_with_index_with_output(events)
+    print 'No.'.ljust(5), 'Title'.ljust(50), "Date\n"
+    puts '-' * $TITLE_WIDTH
+
+    events.each_with_index do |event, index|
+      print "#{index + 1}.".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')} \n"
+    end
+
+    print 'Select an event number from Above to Edit: '
+    EventValidation.validated_numeric_input(1..events&.length)
+  end
+
+  def self.display_events_with_index(events)
+    print 'No.'.ljust(5), 'Title'.ljust(50), "Date\n"
+    puts '-' * $TITLE_WIDTH
+
+    events.each_with_index do |event, index|
+      print "#{index + 1}.".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')} \n"
+    end
   end
 
   def self.show(event)
