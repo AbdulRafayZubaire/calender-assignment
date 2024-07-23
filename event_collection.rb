@@ -1,6 +1,7 @@
 require_relative 'event'
 require_relative 'event_validation'
 require_relative 'event_display'
+require 'pry'
 $TITLE_WIDTH = 70
 
 class EventCollection
@@ -63,16 +64,12 @@ class EventCollection
     filtered_events = @events[previous_date.year][previous_date.month][previous_date.day]
     event_to_edit = filtered_events[selected_event - 1]
 
-    puts previous_date
-    puts filtered_events
-    puts event_to_edit
-
     if attribute['attr_to_edit'] == 'title'
       event_to_edit.title = attribute['value']
       return event_to_edit
-    else
-      event_to_edit.date = attribute['value']
     end
+    event_to_edit.date = attribute['value'] if attribute['attr_to_edit'] == 'date'
+    # binding.pry
 
     # poping the event from current Location if date is changed
     @events[previous_date.year][previous_date.month][previous_date.day].delete(event_to_edit) # array offset
@@ -97,6 +94,8 @@ class EventCollection
   end
 
   def delete_event(event_date, filtered_events, selected_event)
+    # binding.pry
+
     @events[event_date.year][event_date.month][event_date.day].delete(filtered_events[selected_event - 1]) # array
     true
   end
