@@ -56,9 +56,9 @@ module EventDisplay
 
       print 'No.'.ljust(5), 'Title'.ljust(50), "Date\n"
       puts '-' * $TITLE_WIDTH
-      day_events.each_with_index do |event, index|
+      day_events.each.with_index(1) do |event, index|
         # print "#{index+1}".ljust(5), EventDisplay.show(event)
-        print "#{index + 1}".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')}\n"
+        print "#{index}".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')}\n"
       end
     end
   end
@@ -76,8 +76,8 @@ module EventDisplay
     print 'No.'.ljust(5), 'Title'.ljust(50), "Date\n"
     puts '-' * $TITLE_WIDTH
 
-    events.each_with_index do |event, index|
-      print "#{index + 1}.".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')} \n"
+    events.each.with_index(1) do |event, index|
+      print "#{index}.".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')} \n"
     end
 
     print 'Select an event number from Above to Edit: '
@@ -88,8 +88,8 @@ module EventDisplay
     print 'No.'.ljust(5), 'Title'.ljust(50), "Date\n"
     puts '-' * $TITLE_WIDTH
 
-    events.each_with_index do |event, index|
-      print "#{index + 1}.".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')} \n"
+    events.each.with_index(1) do |event, index|
+      print "#{index}.".ljust(5), "#{event.title}".ljust(50), "#{event.date.strftime('%B %d, %Y')} \n"
     end
   end
 

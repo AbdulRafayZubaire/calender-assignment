@@ -20,6 +20,18 @@ class Calender
     Date.new(year, month, -1).day
   end
 
+  def display_calender_title(month, year)
+    puts '-' * $TITLE_WIDTH
+    puts "#{Date::MONTHNAMES[month]}, #{year}".center($TITLE_WIDTH)
+    puts '-' * $TITLE_WIDTH
+    puts "\n"
+  end
+
+  def retrieve_menu
+    ['View Calender', 'Add Event', 'Edit Event', 'View Details of an Event', 'View all events of a month',
+     'View all events on a Date', 'View all Events', 'Delete an Event', 'Quit']
+  end
+
   def render_calender(first_date_month, last_date_month, day_start_index, events_collection, year, month)
     (0..4).to_a.each do |row|
       puts '-' * $TITLE_WIDTH
@@ -38,11 +50,9 @@ class Calender
   end
 
   def display_calender(month = Date.today.month, year = Date.today.year)
-    puts '-' * $TITLE_WIDTH
-    puts "#{Date::MONTHNAMES[month]}, #{year}".center($TITLE_WIDTH)
-    puts '-' * $TITLE_WIDTH
-    puts "\n"
-    Date::DAYNAMES.each do |day|
+    display_calender_title(month, year)
+
+    Date::DAYNAMES.each do |day| # days in a week
       print "#{day}".ljust(10)
     end
     puts "\n\n" # endline
@@ -58,16 +68,15 @@ class Calender
   end
 
   def display_menu_primary
-    menu_arr = ['View Calender', 'Add Event', 'Edit Event', 'View Details of an Event', 'View all events of a month',
-                'View all events on a Date', 'View all Events', 'Delete an Event', 'Quit']
+    menu_arr = retrieve_menu
 
     loop do
       puts "\n\n"
       puts '-' * $TITLE_WIDTH
       puts 'Main menu'.center($TITLE_WIDTH)
       puts '-' * $TITLE_WIDTH
-      menu_arr.each_with_index do |option, index|
-        puts "#{index + 1}" " #{option}"
+      menu_arr.each.with_index(1) do |option, index|
+        puts "#{index}." " #{option}"
       end
 
       print 'Select an option from above: '

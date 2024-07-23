@@ -78,20 +78,20 @@ describe EventCollection do
                                          })).to eq(events_collection.events.dig(2024, 7, 22)[0])
     end
 
-    # it 'Edit an Event' do
-    #   events_collection.add_event({
-    #                                 title: 'morning',
-    #                                 year: 2024,
-    #                                 month: 7,
-    #                                 date: 22
-    #                               })
+    it 'Edit an Event' do
+      events_collection.add_event({
+                                    title: 'morning',
+                                    year: 2024,
+                                    month: 7,
+                                    date: 22
+                                  })
 
-    #   expect(events_collection.edit_event(1,
-    #                                       Date.new(2024, 7, 22),
-    #                                       { 'attr_to_edit': 'date',
-    #                                         'value': Date.new(2002, 1, 29) })).to eq(events_collection.events.dig(
-    #                                           2024, 7, 22
-    #                                         )[-1])
-    # end
+      expect(events_collection.edit_event(1,
+                                          Date.new(2024, 7, 22),
+                                          { 'attr_to_edit' => 'date',
+                                            'value' => Date.new(2002, 1, 29) })).to eq(events_collection.events.dig(
+                                              2002, 1, 29
+                                            )[-1])
+    end
   end
 end
